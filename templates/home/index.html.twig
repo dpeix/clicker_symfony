@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jeu de Clic Rapide{% endblock %}
+
+{% block body %}
+<div class="game-wrapper" 
+     data-controller="click-game" 
+     data-click-game-save-url-value="{{ path('app_save_score') }}"
+     data-click-game-leaderboard-url-value="{{ path('app_leaderboard') }}"
+     data-click-game-duration-value="10">
+    <h1>Jeu de Clic Rapide</h1>
+    <p class="game-description">Cliquez le plus rapidement possible en 10 secondes !</p>
+    
+    <div class="game-info">
+        <div class="info-item">
+            <label>Score :</label>
+            <span class="game-score" data-click-game-target="score">0</span>
+        </div>
+        <div class="info-item">
+            <label>Temps restant :</label>
+            <span class="game-timer" data-click-game-target="timer">10</span>
+            <span class="timer-unit">s</span>
+        </div>
+    </div>
+    
+    <div class="player-input">
+        <label for="player-name">Votre nom :</label>
+        <input 
+            type="text" 
+            id="player-name" 
+            name="player-name" 
+            placeholder="Entrez votre nom"
+            data-click-game-target="playerName"
+            maxlength="255">
+    </div>
+    
+    <div class="game-controls">
+        <button 
+            type="button" 
+            class="btn btn-start" 
+            data-click-game-target="startButton"
+            data-action="click->click-game#start"
+            aria-label="Démarrer le jeu">
+            Démarrer
+        </button>
+    </div>
+    
+    <!-- Zone de clic avec indicateur visuel -->
+    <div class="click-zone" data-click-game-target="clickZone">
+        <div class="click-zone-indicator" data-click-game-target="clickZoneIndicator">
+            <span class="indicator-text">Zone de clic</span>
+        </div>
+        <button 
+            type="button" 
+            class="btn btn-click" 
+            data-click-game-target="clickButton"
+            data-action="click->click-game#click"
+            aria-label="Cliquer"
+            style="display: none;">
+            CLIQUEZ !
+        </button>
+    </div>
+    
+    <div class="game-actions">
+        <button 
+            type="button" 
+            class="btn btn-leaderboard" 
+            data-action="click->click-game#showLeaderboard"
+            aria-label="Voir le classement">
+            🏆 Voir le classement
+        </button>
+    </div>
+    
+    <div class="game-message" 
+         data-click-game-target="message" 
+         style="display: none;">
+    </div>
+    
+    <!-- Décompte avant le début de la partie -->
+    <div class="countdown-overlay" 
+         data-click-game-target="countdownOverlay"
+         style="display: none;">
+        <div class="countdown-number" data-click-game-target="countdownNumber">3</div>
+    </div>
+    
+    <!-- Modale pour afficher le leaderboard à la fin de la partie -->
+    <div class="modal-overlay" 
+         data-click-game-target="modalOverlay"
+         data-action="click->click-game#closeModal"
+         style="display: none;">
+        <div class="modal-content" 
+             data-click-game-target="modalContent"
+             data-action="click->click-game#stopPropagation">
+            <div class="modal-header">
+                <h2 data-click-game-target="modalTitle">🏆 Fin de la partie !</h2>
+                <button type="button" 
+                        class="modal-close" 
+                        data-action="click->click-game#closeModal"
+                        aria-label="Fermer">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-score-display" data-click-game-target="modalScoreDisplay" style="display: none;">
+                    <p class="modal-score-label">Votre score :</p>
+                    <p class="modal-score-value" data-click-game-target="modalScore">0</p>
+                    <p class="modal-score-text">clics en 10 secondes</p>
+                </div>
+                <div class="modal-leaderboard">
+                    <h3>Top 5 des meilleurs scores</h3>
+                    <div class="modal-leaderboard-list" data-click-game-target="modalLeaderboard">
+                        <div class="leaderboard-loading">Chargement...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" data-click-game-target="modalFooter">
+                <button class="btn btn-start" 
+                        data-action="click->click-game#start">
+                    Rejouer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
